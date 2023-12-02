@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:swapp/pages/recuperar_contraseña.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -21,11 +20,9 @@ class SwApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-
       initialRoute: '/recuperar_contraseña',
       routes: {
-        '/recuperar_contraseña': (context) => PasswordResetScreen(), // Ruta para la pantalla de recuperación de contraseña
-
+        //'/recuperar_contraseña': (context) => PasswordResetScreen(), // Ruta para la pantalla de recuperación de contraseña
       },
     );
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "601460598803",
+    "project_id": "swapp-712b1",
+    "storage_bucket": "swapp-712b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601460598803:android:e77accec9973a680aeb7e6",
+        "android_client_info": {
+          "package_name": "com.example.swapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXBktUcvFbbmRkLNyH-RTo89oVo1rgUSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
