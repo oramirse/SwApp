@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:swapp/classes/group_schedule.dart';
 
 class GroupScheduleForm extends StatefulWidget {
-  @override
-  _GroupScheduleFormState createState() => _GroupScheduleFormState();
+  const GroupScheduleForm({required Key key}) : super(key: key);
 
-  GroupSchedule? getDataForm(BuildContext context) {
-    final state = context.findAncestorStateOfType<_GroupScheduleFormState>();
-    return state?.getDataForm();
-  }
+  @override
+  GroupScheduleFormState createState() => GroupScheduleFormState();
 }
 
-class _GroupScheduleFormState extends State<GroupScheduleForm> {
+class GroupScheduleFormState extends State<GroupScheduleForm> {
   var groupNameController = TextEditingController();
   List<TimeSlot> timeSlots = [];
 

@@ -13,10 +13,10 @@ class MakeOffer extends StatefulWidget {
 }
 
 class _MakeOfferState extends State<MakeOffer> {
-  GroupScheduleForm _groupScheduleForm = GroupScheduleForm();
+  final key = GlobalKey<GroupScheduleFormState>();
 
   void _offert() {
-    GroupSchedule? groupSchedule = _groupScheduleForm.getDataForm(context);
+    GroupSchedule? groupSchedule = key.currentState?.getDataForm();
     if (groupSchedule == null) {
       _showFailMessage();
     } else {
@@ -76,7 +76,7 @@ class _MakeOfferState extends State<MakeOffer> {
               textAlign: TextAlign.center),
           SizedBox(height: 20),
           //Formulario para agregar el grupo con su horario
-          _groupScheduleForm,
+          GroupScheduleForm(key: key),
           SizedBox(height: 20),
           //Boton de realizar la oferta
           GestureDetector(
