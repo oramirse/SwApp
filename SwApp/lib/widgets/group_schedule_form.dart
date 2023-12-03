@@ -4,6 +4,11 @@ import 'package:swapp/classes/group_schedule.dart';
 class GroupScheduleForm extends StatefulWidget {
   @override
   _GroupScheduleFormState createState() => _GroupScheduleFormState();
+
+  GroupSchedule? getDataForm(BuildContext context) {
+    final state = context.findAncestorStateOfType<_GroupScheduleFormState>();
+    return state?.getDataForm();
+  }
 }
 
 class _GroupScheduleFormState extends State<GroupScheduleForm> {
@@ -13,6 +18,7 @@ class _GroupScheduleFormState extends State<GroupScheduleForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Campo de texto para el nombre del grupo
         const Text(
@@ -23,46 +29,20 @@ class _GroupScheduleFormState extends State<GroupScheduleForm> {
           ),
           textAlign: TextAlign.left,
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 10,
-                spreadRadius: 7,
-                offset: const Offset(1, 1),
-                color: Colors.grey.withOpacity(0.2),
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: groupNameController,
-            decoration: InputDecoration(
-              hintText: "Ingresa tu grupo",
-              prefixIcon: const Icon(
-                Icons.email,
-                color: Colors.teal,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                  width: 1.0,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                  width: 1.0,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
+        TextFormField(
+          controller: groupNameController,
+          decoration: InputDecoration(
+            hintText: 'Ingresa tu grupo',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
             ),
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Este campo es obligatorio';
+            }
+            return null;
+          },
         ),
         //Campo para el horario
         const Text(
@@ -230,7 +210,18 @@ class _GroupScheduleFormState extends State<GroupScheduleForm> {
     });
   }
 
-  GroupSchedule getDataForm() {
+  GroupSchedule? getDataForm() {
+    String group = groupNameController.text;
+    bool hasTimeSlotsNull = timeSlots.any((timeSlot) =>
+        timeSlot.day == null ||
+        timeSlot.day!.isEmpty ||
+        timeSlot.startTime == null ||
+        timeSlot.startTime!.isEmpty ||
+        timeSlot.endTime == null ||
+        timeSlot.endTime!.isEmpty);
+    if (group == null || group.isEmpty || hasTimeSlotsNull) {
+      return null;
+    }
     return GroupSchedule(groupNameController.text, timeSlots);
   }
 }
