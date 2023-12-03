@@ -1,7 +1,11 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -15,12 +19,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contrasenaController = TextEditingController();
   final TextEditingController numeroTelefonoController = TextEditingController();
-
-
+  File? profileImage;
+  XFile? _image;
 
   @override
+  void dispose() {
+    nombresController.dispose();
+    emailController.dispose();
+    contrasenaController.dispose();
+    numeroTelefonoController.dispose();
+    super.dispose();
+  }
 
-  void verificarExistenciaUsuario(BuildContext context) async {
+  Future<void> verificarExistenciaUsuario(BuildContext context) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     QuerySnapshot querySnapshot = await firestore
@@ -54,11 +65,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       var usuarioRef = firestore.collection('usuarios').doc(userId);
 
+      String? imageUrl = await uploadImageToFirebaseStorage();
       await usuarioRef.set({
         'id': userId,
         'nombre': nombresController.text.trim(),
         'email': emailController.text.trim(),
         'numeroTelefono': numeroTelefonoController.text.trim(),
+        'image': imageUrl,
         'contraseña': contrasenaController.text,
       });
 
@@ -69,6 +82,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  Future<String?> uploadImageToFirebaseStorage() async {
+    ByteData imageData = await rootBundle.load('assets/profile.jpg');
+    List<int> byteData = imageData.buffer.asUint8List();
+    Uint8List uint8List = Uint8List.fromList(byteData);
+
+    try {
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('images')
+          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+      firebase_storage.UploadTask uploadTask = ref.putData(uint8List);
+      firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
+
+      return await taskSnapshot.ref.getDownloadURL();
+    } catch (e) {
+      print('Error al cargar la imagen: $e');
+      return null;
+    }
+  }
   void _showSuccessMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -79,7 +112,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _redirectToLoginPage() {
-    Navigator.pushReplacementNamed(context, '/recuperar_contraseña');
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -125,7 +158,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Nombre', // Texto agregado antes del campo de nombre
+                  'Nombre',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -151,7 +184,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Email', // Texto agregado antes del campo de nombre
+                  'Email',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -179,7 +212,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Teléfono', // Texto agregado antes del campo de nombre
+                  'Teléfono',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -207,7 +240,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Contraseña', // Texto agregado antes del campo de nombre
+                  'Contraseña',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
