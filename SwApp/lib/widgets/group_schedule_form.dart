@@ -14,45 +14,47 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Campo de texto para el nombre del grupo
-        const Text(
-          'Grupo',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.left,
-        ),
-        TextFormField(
-          controller: groupNameController,
-          decoration: InputDecoration(
-            hintText: 'Ingresa tu grupo',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Campo de texto para el nombre del grupo
+            const Text(
+              'Grupo',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
             ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Este campo es obligatorio';
-            }
-            return null;
-          },
-        ),
-        //Campo para el horario
-        const Text(
-          'Horario',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.left,
-        ),
-        TimeSlotRowContainer()
-      ],
-    );
+            TextFormField(
+              controller: groupNameController,
+              decoration: InputDecoration(
+                hintText: 'Ingresa tu grupo',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Este campo es obligatorio';
+                }
+                return null;
+              },
+            ),
+            //Campo para el horario
+            const Text(
+              'Horario',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            TimeSlotRowContainer()
+          ],
+        ));
   }
 
   Widget TimeSlotRowContainer() {

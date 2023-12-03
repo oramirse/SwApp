@@ -48,69 +48,71 @@ class _MakeOfferState extends State<MakeOffer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: ShapeDecoration(
-        color: Color(0xFFFFFEFE),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 2, color: Color(0xFF408E90)),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        shadows: [
-          BoxShadow(
-            color: Color(0x3F000000),
-            blurRadius: 4,
-            offset: Offset(0, 4),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: 16),
-          Text("Realizar oferta",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center),
-          SizedBox(height: 20),
-          //Formulario para agregar el grupo con su horario
-          GroupScheduleForm(key: key),
-          SizedBox(height: 20),
-          //Boton de realizar la oferta
-          GestureDetector(
-            onTap: () {
-              _offert();
-            },
-            child: Container(
-              width: double.infinity,
-              height: 50.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF3A9193),
-                    Color(0xFF28D5D9),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Ofertar',
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          decoration: ShapeDecoration(
+            color: Color(0xFFFFFEFE),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 2, color: Color(0xFF408E90)),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            shadows: [
+              BoxShadow(
+                color: Color(0x3F000000),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 16),
+              Text("Realizar oferta",
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center),
+              SizedBox(height: 20),
+              //Formulario para agregar el grupo con su horario
+              GroupScheduleForm(key: key),
+              SizedBox(height: 20),
+              //Boton de realizar la oferta
+              GestureDetector(
+                onTap: () {
+                  _offert();
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF3A9193),
+                        Color(0xFF28D5D9),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Ofertar',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
