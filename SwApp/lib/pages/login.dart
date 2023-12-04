@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -117,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Centra los widgets verticalmente
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: w,
@@ -133,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
               margin: const EdgeInsets.only(left: 20, right: 20),
               width: w,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch, // Centra los widgets horizontalmente
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 16),
                   Text(
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                       textAlign: TextAlign.center
                   ),
-                  SizedBox(height: 5), // Espacio adicional
+                  SizedBox(height: 5),
                   Text(
                     "Te damos la bienvenida a SwApp",
                     style: TextStyle(

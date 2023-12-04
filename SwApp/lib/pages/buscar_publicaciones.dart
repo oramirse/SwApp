@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:swapp/widgets/make_offer.dart';
 
 
 class SearchPostsPage extends StatefulWidget {
+  final String userEmail;
+  SearchPostsPage({required this.userEmail});
   @override
   _SearchPostsPageState createState() => _SearchPostsPageState();
 }
@@ -181,6 +184,10 @@ class _SearchPostsPageState extends State<SearchPostsPage> {
                               ),
                               child: TextButton(
                                 onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => MakeOffer(userEmail: widget.userEmail)),
+                                  );
                                 },
                                 child: Text(
                                   'Realizar oferta',

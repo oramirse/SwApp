@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:swapp/pages/buscar_publicaciones.dart';
+import 'package:swapp/pages/editar_perfil.dart';
+import 'package:swapp/pages/realizar_oferta.dart';
+import 'package:swapp/pages/ver_publicaciones.dart';
+import 'package:swapp/widgets/group_schedule_form.dart';
+import 'package:swapp/widgets/make_offer.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -65,9 +71,11 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
   void saveTokenToDatabase(String token) {
     print('Token guardado en la base de datos: $token');
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,13 +156,24 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSpacing: 20,
                 children: [
                   buildGridButton("Buscar publicaciones", Icons.search, () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchPostsPage(userEmail: widget.userEmail)),
+                    );
                   }),
                   buildGridButton("Crear una publicación", Icons.add_circle_outline, () {
                   }),
                   buildGridButton("Ver tus publicaciones", Icons.mode_comment_outlined, () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UserPostsPage(userEmail: widget.userEmail)),
+                    );
                   }),
                   buildGridButton("Editar tu perfil", Icons.mode_edit,() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditProfilePage(userEmail: widget.userEmail)),
+                    );
                   }),
                 ],
               ),
