@@ -5,7 +5,8 @@ import 'package:swapp/pages/home.dart';
 import 'package:swapp/pages/recuperar_contraseña.dart';
 import 'package:swapp/pages/registro.dart';
 import 'package:swapp/pages/login.dart';
-
+import 'package:swapp/widgets/make_offer.dart';
+import 'package:swapp/widgets/group_schedule_form.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,8 @@ void main() async {
   );
   runApp(SwApp());
 }
+
+final key = GlobalKey<GroupScheduleFormState>();
 
 class SwApp extends StatelessWidget {
   @override
@@ -36,13 +39,15 @@ class SwApp extends StatelessWidget {
         fontFamily: 'SF UI  Text',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-
-      initialRoute: '/login',
+      initialRoute: '/realizar-oferta',
       routes: {
+        '/formulario-grupo': (context) => GroupScheduleForm(key: key),
+        '/realizar-oferta': (context) => MakeOffer(userEmail: "ssss"),
         '/recuperar_contraseña': (context) => PasswordRecoveryPage(),
         '/registro': (context) => RegistrationPage(),
         '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(userEmail: ModalRoute.of(context)?.settings.arguments as String),
+        '/home': (context) => HomePage(
+            userEmail: ModalRoute.of(context)?.settings.arguments as String),
       },
     );
   }

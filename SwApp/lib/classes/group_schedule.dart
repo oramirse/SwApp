@@ -9,4 +9,10 @@ class TimeSlot {
   String? day;
   String? startTime;
   String? endTime;
+
+  TimeSlot() {
+    this.day = null;
+    this.startTime = null;
+    this.endTime = null;
+  }
 }
