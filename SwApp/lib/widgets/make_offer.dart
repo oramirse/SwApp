@@ -25,10 +25,10 @@ class _MakeOfferState extends State<MakeOffer> {
   }
 
   Future<void> registrarOfertar(GroupSchedule groupSchedule) async {
-    _showMessageDialog('Oferta realizada con exito');
+    _showMessageDialog('Oferta realizada con exito', pop: true);
   }
 
-  void _showMessageDialog(String message) {
+  void _showMessageDialog(String message, {bool pop = false}) {
     showDialog(
       context: context,
       //Desactivar pulsasiones fuera del cuadro
@@ -46,12 +46,17 @@ class _MakeOfferState extends State<MakeOffer> {
           ],
         );
       },
-    );
+    ).then((_) {
+      if (pop) Navigator.pop(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Dialog(
+        child: Container(
+      //Dar forma al contenedor
+      padding: const EdgeInsets.all(16.0),
       decoration: ShapeDecoration(
         color: Color(0xFFFFFEFE),
         shape: RoundedRectangleBorder(
@@ -67,9 +72,12 @@ class _MakeOfferState extends State<MakeOffer> {
           )
         ],
       ),
+      //Campos para realizar una oferta
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          //Titulo
           SizedBox(height: 16),
           Text("Realizar oferta",
               style: TextStyle(
@@ -114,6 +122,6 @@ class _MakeOfferState extends State<MakeOffer> {
           ),
         ],
       ),
-    );
+    ));
   }
 }

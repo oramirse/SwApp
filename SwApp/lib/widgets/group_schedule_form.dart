@@ -10,7 +10,7 @@ class GroupScheduleForm extends StatefulWidget {
 
 class GroupScheduleFormState extends State<GroupScheduleForm> {
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  var groupNameController = TextEditingController();
+  final TextEditingController groupNameController = TextEditingController();
   List<TimeSlot> timeSlots = [];
 
   @override
@@ -28,7 +28,7 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
             key: globalKey,
             child: SingleChildScrollView(
                 child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(2),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -72,7 +72,7 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(2),
           child: Text(
             'Horario',
             style: TextStyle(
@@ -126,18 +126,6 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
         child: Row(
           children: [
             //Campo para seleccionar el dia
-            /*
-            Column(children: [
-              Text(
-                'Dia',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ]),
-            */
             Expanded(
               child: DropdownButtonFormField<String>(
                 value: timeSlots[index].day,
@@ -162,9 +150,10 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                 decoration: InputDecoration(
                   hintText: 'Día',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+                isExpanded: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es obligatorio';
@@ -173,20 +162,7 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                 },
               ),
             ),
-            const SizedBox(width: 8.0),
             // Widget para seleccionar la hora de inicio
-            /*
-            Column(children: [
-              Text(
-                'Inicio',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ]),
-            */
             Expanded(
               child: DropdownButtonFormField<String>(
                 value: timeSlots[index].startTime,
@@ -220,9 +196,10 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                 decoration: InputDecoration(
                   hintText: 'Desde',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+                isExpanded: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es obligatorio';
@@ -231,20 +208,6 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                 },
               ),
             ),
-            SizedBox(width: 8.0),
-            // Widget para seleccionar la hora de fin
-            /*
-            Column(children: [
-              Text(
-                'Fin',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ]),
-            */
             Expanded(
               child: DropdownButtonFormField<String>(
                 value: timeSlots[index].endTime,
@@ -278,9 +241,10 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                 decoration: InputDecoration(
                   hintText: 'Hasta',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+                isExpanded: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es obligatorio';
