@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:swapp/pages/ver_ofertas.dart';
 
 class UserPostsPage extends StatefulWidget {
   final String userEmail;
@@ -274,6 +275,12 @@ class _UserPostsPageState extends State<UserPostsPage> {
                         ),
                         child: TextButton(
                           onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OfferPage(postId: postId),
+                              ),
+                            );
                           },
                           child: Text(
                             'Ver ofertas',
