@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class OfferPage extends StatefulWidget {
   final String postId;
@@ -15,22 +18,10 @@ class _OfferPageState extends State<OfferPage> {
   String _phoneNumber = '';
   String _userName = '';
   String _userImage = '';
+  Map<String, dynamic>? _offerData;
 
-
-  void acceptOffer() async {
-    String message = "Hola, te escribo desde SwApp. Me interesa tu oferta.";
-
-    var whatsappUrl = "https://wa.me/$_phoneNumber?text=${Uri.encodeFull(
-        message)}";
-
-    try {
-      await launch(whatsappUrl);
-    } catch (e) {
-      print('No se pudo abrir WhatsApp: $e');
-    }
-  }
-
-  Future<void> _confirmDialog() async {
+  Future<void> _confirmDialog(String offerUserId,
+      Map<String, dynamic> offerData) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -46,7 +37,8 @@ class _OfferPageState extends State<OfferPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text("Te redireccionaremos a WhatsApp para que te comuniques con:"),
+              Text(
+                  "Te redireccionaremos a WhatsApp para que te comuniques con:"),
               SizedBox(height: 16),
               ListTile(
                 leading: CircleAvatar(
@@ -58,28 +50,18 @@ class _OfferPageState extends State<OfferPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(
-                  'Confirmar',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                ),
-              ),
+              child: Text('Confirmar'),
               onPressed: () {
+                setState(() {
+                  _offerData = offerData;
+                });
+                sendNotification(offerUserId, widget.postId);
                 acceptOffer();
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text(
-                  'Cancelar',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                ),
-              ),
+              child: Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -143,6 +125,8 @@ class _OfferPageState extends State<OfferPage> {
             itemCount: offers.length,
             itemBuilder: (BuildContext context, int index) {
               var offerData = offers[index].data() as Map<String, dynamic>;
+
+
               var daysOrder = [
                 'lunes',
                 'martes',
@@ -181,10 +165,6 @@ class _OfferPageState extends State<OfferPage> {
                   if (userData == null || userData.isEmpty) {
                     return Text('Datos del usuario no encontrados');
                   }
-
-                  var nombreUsuario =
-                      userData['nombre'] ?? 'Nombre no disponible';
-                  var imagenUsuario = userData['image'] ?? '';
 
                   return Card(
                     margin: EdgeInsets.all(8.0),
@@ -248,7 +228,8 @@ class _OfferPageState extends State<OfferPage> {
                                       _userName = userData['nombre'];
                                       _userImage = userData['image'];
                                     });
-                                    _confirmDialog();
+                                    _confirmDialog(
+                                        offerData['id_usuario'], offerData);
                                   },
                                   child: Text(
                                     'Aceptar',
@@ -275,6 +256,7 @@ class _OfferPageState extends State<OfferPage> {
                                 ),
                                 child: TextButton(
                                   onPressed: () async {
+                                    rejectOfferNotification(offerData['id_usuario'], offerData);
                                     await FirebaseFirestore.instance
                                         .collection('oferta')
                                         .doc(offers[index].id)
@@ -303,5 +285,159 @@ class _OfferPageState extends State<OfferPage> {
         },
       ),
     );
+  }
+
+  void acceptOffer() async {
+    String message = "Hola, te escribo desde SwApp. Me interesa tu oferta.";
+
+    var whatsappUrl = "https://wa.me/$_phoneNumber?text=${Uri.encodeFull(
+        message)}";
+
+    try {
+      await launch(whatsappUrl);
+    } catch (e) {
+      print('No se pudo abrir WhatsApp: $e');
+    }
+  }
+
+  void sendNotification(String offerUserId, String postId) async {
+    if (_offerData != null) {
+      var postSnapshot = await FirebaseFirestore.instance
+          .collection('publicaciones')
+          .doc(postId)
+          .get();
+
+      if (postSnapshot.exists) {
+        var postData = postSnapshot.data();
+        String? asignatura = postData?['asignatura'];
+
+        String postUserId = postData?['id_usuario'];
+
+        var userSnapshot = await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(postUserId)
+            .get();
+
+        if (userSnapshot.exists) {
+          var userData = userSnapshot.data();
+          String? nombreUsuario = userData?['nombre'];
+          String message =
+              '¡$nombreUsuario ha aceptado tu oferta del grupo ${_offerData?['grupo_ofertado']} para la asignatura $asignatura! Se comunicará contigo por medio de WhatsApp';
+
+          var offerUserSnapshot = await FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(offerUserId)
+              .get();
+
+          if (offerUserSnapshot.exists) {
+            var offerUserData = offerUserSnapshot.data();
+            String? offerUserDeviceToken = offerUserData?['deviceToken'];
+
+            if (offerUserDeviceToken != null) {
+              try {
+                var response = await http.post(
+                  Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'key=AAAAjAnYaBM:APA91bHEctIdQqeibwrpA05g51PLO0Y4ehcjjRG8Knt_TE5NC3V5bp1IwZsCxKdsLTQ1CNx34RLBcP3e55v4IIIjFUcFzKm1u2GHXSegcHFnI-JkuLHIteI369X5ygwxwXg3dSxnoTpy',
+                  },
+                  body: jsonEncode(
+                    <String, dynamic>{
+                      'notification': <String, dynamic>{
+                        'body': message,
+                        'title': 'Oferta aceptada',
+                      },
+                      'priority': 'high',
+                      'data': <String, dynamic>{
+                        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'id': '1',
+                        'status': 'done'
+                      },
+                      'to': offerUserDeviceToken,
+                    },
+                  ),
+                );
+
+                print('Respuesta de FCM: ${response.body}');
+              } catch (e) {
+                print('Error al enviar la notificación: $e');
+              }
+            } else {
+              print(
+                  'Token de dispositivo del usuario de la oferta no encontrado');
+            }
+          } else {
+            print('Datos del usuario de la oferta no encontrados');
+          }
+        }
+      }
+    }
+  }
+
+  void rejectOfferNotification(String offerUserId,
+      Map<String, dynamic> offerData) async {
+    var offerUserSnapshot = await FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(offerUserId)
+        .get();
+
+    if (offerUserSnapshot.exists) {
+      var offerUserData = offerUserSnapshot.data();
+      String? offerUserDeviceToken = offerUserData?['deviceToken'];
+
+      if (offerUserDeviceToken != null) {
+        var postSnapshot = await FirebaseFirestore.instance
+            .collection('publicaciones')
+            .doc(offerData['id_publicacion'])
+            .get();
+
+        if (postSnapshot.exists) {
+          var postData = postSnapshot.data();
+          String? asignatura = postData?['asignatura'];
+
+          if (asignatura != null) {
+            String message =
+                'Tu oferta del grupo ${offerData['grupo_ofertado']} de la asignatura $asignatura ha sido rechazada.';
+
+            try {
+              var response = await http.post(
+                Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json',
+                  'Authorization': 'key=YOUR_SERVER_KEY',
+                },
+                body: jsonEncode(
+                  <String, dynamic>{
+                    'notification': <String, dynamic>{
+                      'body': message,
+                      'title': 'Oferta rechazada',
+                    },
+                    'priority': 'high',
+                    'data': <String, dynamic>{
+                      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                      'id': '1',
+                      'status': 'rejected'
+                    },
+                    'to': offerUserDeviceToken,
+                  },
+                ),
+              );
+
+              print('Respuesta de FCM: ${response.body}');
+            } catch (e) {
+              print('Error al enviar la notificación: $e');
+            }
+          } else {
+            print('Asignatura no encontrada en los datos de la publicación');
+          }
+        } else {
+          print('Datos de la publicación no encontrados');
+        }
+      } else {
+        print('Token de dispositivo del usuario de la oferta no encontrado');
+      }
+    } else {
+      print('Datos del usuario de la oferta no encontrados');
+    }
   }
 }
