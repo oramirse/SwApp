@@ -1,8 +1,27 @@
 class GroupSchedule {
-  String? nameGroup;
+  String? groupName;
   List<TimeSlot>? timeSlots;
 
-  GroupSchedule(this.nameGroup, this.timeSlots);
+  GroupSchedule(this.groupName, this.timeSlots);
+
+  // Función para convertir las franjas horarias a un mapa
+  Map<String, dynamic> convertirHorariosAMapa() {
+    Map<String, dynamic> horariosMapa = {};
+
+    // Verificar que timeSlots no sea nulo antes de iterar
+    timeSlots?.forEach((timeSlot) {
+      String dia = timeSlot.day ?? '';
+      String inicio = timeSlot.startTime ?? '';
+      String fin = timeSlot.endTime ?? '';
+
+      if (dia.isNotEmpty && inicio.isNotEmpty && fin.isNotEmpty) {
+        // Agregar el mapa al día correspondiente
+        horariosMapa[dia] = {'inicio': inicio, 'fin': fin};
+      }
+    });
+
+    return horariosMapa;
+  }
 }
 
 class TimeSlot {
@@ -11,8 +30,8 @@ class TimeSlot {
   String? endTime;
 
   TimeSlot() {
-    this.day = null;
-    this.startTime = null;
-    this.endTime = null;
+    day = null;
+    startTime = null;
+    endTime = null;
   }
 }

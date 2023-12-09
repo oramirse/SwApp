@@ -298,6 +298,6 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
     if (!globalKey.currentState!.validate()) {
       return null;
     }
-    return GroupSchedule(groupNameController.text, timeSlots);
+    return GroupSchedule(groupNameController.text.trim(), timeSlots);
   }
 }

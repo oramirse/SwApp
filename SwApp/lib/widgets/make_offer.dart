@@ -2,30 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:swapp/widgets/group_schedule_form.dart';
 import 'package:swapp/classes/group_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MakeOffer extends StatefulWidget {
   final String userEmail;
+  final String postID;
 
-  const MakeOffer({required this.userEmail});
+  const MakeOffer({required this.userEmail, required this.postID});
 
   @override
-  _MakeOfferState createState() => _MakeOfferState();
+  MakeOfferState createState() => MakeOfferState(postID: postID);
 }
 
-class _MakeOfferState extends State<MakeOffer> {
+class MakeOfferState extends State<MakeOffer> {
   final key = GlobalKey<GroupScheduleFormState>();
+  final String postID;
+
+  MakeOfferState({required this.postID});
 
   void _offert() {
     GroupSchedule? groupSchedule = key.currentState?.getDataForm();
-    if (groupSchedule == null) {
-      _showMessageDialog('Asegúrate de registrar todos los campos');
-    } else {
-      registrarOfertar(groupSchedule);
-    }
+    if (groupSchedule != null) registrarOfertar(groupSchedule);
   }
 
   Future<void> registrarOfertar(GroupSchedule groupSchedule) async {
-    _showMessageDialog('Oferta realizada con exito', pop: true);
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String userID = user.uid;
+        String? userEmail = user.email;
+
+        // Construir un mapa con la información de la oferta
+        Map<String, dynamic> ofertaData = {
+          'email_usuario': userEmail,
+          'franja_horaria': groupSchedule.convertirHorariosAMapa(),
+          'grupo_ofertado': groupSchedule.groupName,
+          'id_usuario': userID,
+          'id_publicacion': postID,
+        };
+
+        // Agregar la publicación a Firestore
+        await FirebaseFirestore.instance.collection('oferta').add(ofertaData);
+
+        _showMessageDialog('Oferta realizada con exito', pop: true);
+      }
+    } catch (e) {
+      _showMessageDialog(
+          'Error al realizar oferta, por favor intentelo mas tarde');
+    }
   }
 
   void _showMessageDialog(String message, {bool pop = false}) {
@@ -41,7 +65,7 @@ class _MakeOfferState extends State<MakeOffer> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -58,12 +82,12 @@ class _MakeOfferState extends State<MakeOffer> {
       //Dar forma al contenedor
       padding: const EdgeInsets.all(16.0),
       decoration: ShapeDecoration(
-        color: Color(0xFFFFFEFE),
+        color: const Color(0xFFFFFEFE),
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 2, color: Color(0xFF408E90)),
+          side: const BorderSide(width: 2, color: Color(0xFF408E90)),
           borderRadius: BorderRadius.circular(20),
         ),
-        shadows: [
+        shadows: const [
           BoxShadow(
             color: Color(0x3F000000),
             blurRadius: 4,
@@ -77,17 +101,17 @@ class _MakeOfferState extends State<MakeOffer> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           //Titulo
-          SizedBox(height: 16),
-          Text("Realizar oferta",
+          const SizedBox(height: 16),
+          const Text("Realizar oferta",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           //Formulario para agregar el grupo con su horario
           GroupScheduleForm(key: key),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           //Boton de realizar la oferta
           GestureDetector(
             onTap: () {
@@ -98,7 +122,7 @@ class _MakeOfferState extends State<MakeOffer> {
               height: 50.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [
                     Color(0xFF3A9193),
                     Color(0xFF28D5D9),
@@ -107,7 +131,7 @@ class _MakeOfferState extends State<MakeOffer> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Ofertar',
                   style: TextStyle(

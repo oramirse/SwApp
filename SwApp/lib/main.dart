@@ -78,7 +78,10 @@ class SwApp extends StatelessWidget {
       ),
       initialRoute: '/realizar_oferta',
       routes: {
-        '/realizar_oferta': (context) => MakeOffer(userEmail: "s"),
+        '/realizar_oferta': (context) => MakeOffer(
+              userEmail: "s",
+              postID: "s",
+            ),
         '/crear_publicaciones': (context) => MakePostsPage(userEmail: "s"),
         '/recuperar_contraseña': (context) => PasswordRecoveryPage(),
         '/registro': (context) => RegistrationPage(),

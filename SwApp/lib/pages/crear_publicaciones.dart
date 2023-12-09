@@ -11,13 +11,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 class MakePostsPage extends StatefulWidget {
   final String userEmail;
-  MakePostsPage({required this.userEmail});
+  const MakePostsPage({required this.userEmail});
 
   @override
-  _MakePostsPageState createState() => _MakePostsPageState();
+  MakePostsPageState createState() => MakePostsPageState();
 }
 
-class _MakePostsPageState extends State<MakePostsPage> {
+class MakePostsPageState extends State<MakePostsPage> {
   final GlobalKey<GroupScheduleFormState> _keyGroupScheduleForm =
       GlobalKey<GroupScheduleFormState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -46,7 +46,35 @@ class _MakePostsPageState extends State<MakePostsPage> {
   }
 
   Future<void> _registrarPublicacion(GroupSchedule groupSchedule) async {
-    _showSuccesMessage();
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String userID = user.uid;
+        String? userEmail = user.email;
+
+        // Construir un mapa con la información de la publicación
+        Map<String, dynamic> publicacionData = {
+          'asignatura': subjectName,
+          'email_usuario': userEmail,
+          'franja_horaria': groupSchedule.convertirHorariosAMapa(),
+          'grupo': groupSchedule.groupName,
+          'grupo_deseado': _desiredGroupNameController.text.trim(),
+          'id_usuario': userID,
+        };
+
+        // Agregar la publicación a Firestore
+        await FirebaseFirestore.instance
+            .collection('publicaciones')
+            .add(publicacionData);
+
+        _showMessageDialog('Publicación creada con exito', pop: true);
+      } else {
+        _showMessageDialog('Error al obtener la informacion del usuario');
+      }
+    } catch (e) {
+      _showMessageDialog(
+          'Error al realizar la publicación, por favor intentelo mas tarde');
+    }
   }
 
   void _showFailMessage() {
@@ -58,14 +86,14 @@ class _MakePostsPageState extends State<MakePostsPage> {
     );
   }
 
-  void _showSuccesMessage() {
+  void _showMessageDialog(String message, {bool pop = false}) {
     showDialog(
       context: context,
       //Desactivar pulsasiones fuera del cuadro
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text("Publicación creada con exito"),
+          content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
@@ -77,8 +105,7 @@ class _MakePostsPageState extends State<MakePostsPage> {
         );
       },
     ).then((_) {
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/home');
+      if (pop) Navigator.pop(context);
     });
   }
 
