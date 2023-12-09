@@ -58,6 +58,7 @@ dependencies:
   whatsapp: ^0.0.1
   share: ^2.0.4
   flutter_share: ^2.0.0
+  dropdown_button2: ^2.3.9
 
 
 

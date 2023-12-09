@@ -72,7 +72,6 @@ class _MakeOfferState extends State<MakeOffer> {
           )
         ],
       ),
-      //Campos para realizar una oferta
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

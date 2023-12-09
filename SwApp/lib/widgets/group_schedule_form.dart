@@ -85,16 +85,22 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
         ListView.separated(
           shrinkWrap: true,
           physics: const ScrollPhysics(),
-          itemCount: this.timeSlots.length,
+          itemCount: timeSlots.length,
           itemBuilder: (context, index) {
             return Column(
               children: <Widget>[
+                const SizedBox(
+                  height: 2.0,
+                ),
                 Row(children: <Widget>[
                   Flexible(
                     fit: FlexFit.loose,
                     child: timeSlotRow(index),
                   ),
                 ]),
+                const SizedBox(
+                  height: 2.0,
+                ),
               ],
             );
           },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:swapp/pages/crear_publicaciones.dart';
+import 'package:swapp/widgets/make_offer.dart';
 import 'firebase_options.dart';
 import 'package:swapp/pages/home.dart';
 import 'package:swapp/pages/recuperar_contraseña.dart';
@@ -7,8 +9,6 @@ import 'package:swapp/pages/registro.dart';
 import 'package:swapp/pages/login.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,11 +35,11 @@ class SwApp extends StatelessWidget {
     );
 
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+        FlutterLocalNotificationsPlugin();
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -76,12 +76,15 @@ class SwApp extends StatelessWidget {
         fontFamily: 'SF UI Text',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/login',
+      initialRoute: '/realizar_oferta',
       routes: {
+        '/realizar_oferta': (context) => MakeOffer(userEmail: "s"),
+        '/crear_publicaciones': (context) => MakePostsPage(userEmail: "s"),
         '/recuperar_contraseña': (context) => PasswordRecoveryPage(),
         '/registro': (context) => RegistrationPage(),
         '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(userEmail: ModalRoute.of(context)?.settings.arguments as String),
+        '/home': (context) => HomePage(
+            userEmail: ModalRoute.of(context)?.settings.arguments as String),
       },
     );
   }

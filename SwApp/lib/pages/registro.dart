@@ -18,7 +18,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController nombresController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contrasenaController = TextEditingController();
-  final TextEditingController numeroTelefonoController = TextEditingController();
+  final TextEditingController numeroTelefonoController =
+      TextEditingController();
   File? profileImage;
   XFile? _image;
 
@@ -55,7 +56,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Future<void> registrarUsuario() async {
     try {
       UserCredential userCredential =
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: contrasenaController.text.trim(),
       );
@@ -102,6 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       return null;
     }
   }
+
   void _showSuccessMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -203,7 +205,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Este campo es obligatorio';
                     }
-                    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$');
+                    final emailRegex = RegExp(
+                        r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$');
                     if (!emailRegex.hasMatch(value)) {
                       return 'Ingresa un email válido';
                     }
@@ -232,7 +235,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Este campo es obligatorio';
                     } else if (value.length != 10 ||
-                        !(value.startsWith('30') || value.startsWith('31') || value.startsWith('32'))) {
+                        !(value.startsWith('30') ||
+                            value.startsWith('31') ||
+                            value.startsWith('32'))) {
                       return 'Ingresa un número de teléfono válido';
                     }
                     return null;
