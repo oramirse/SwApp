@@ -32,7 +32,6 @@ class MakeOfferState extends State<MakeOffer> {
         String userID = user.uid;
         String? userEmail = user.email;
 
-        // Construir un mapa con la información de la oferta
         Map<String, dynamic> ofertaData = {
           'email_usuario': userEmail,
           'franja_horaria': groupSchedule.convertirHorariosAMapa(),
@@ -41,7 +40,6 @@ class MakeOfferState extends State<MakeOffer> {
           'id_publicacion': postID,
         };
 
-        // Agregar la publicación a Firestore
         await FirebaseFirestore.instance.collection('oferta').add(ofertaData);
 
         _showMessageDialog('Oferta realizada con exito', pop: true);

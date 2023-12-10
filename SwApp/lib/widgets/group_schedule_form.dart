@@ -178,21 +178,21 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                   });
                 },
                 items: [
-                  '6:00 AM',
-                  '7:00 AM',
-                  '8:00 AM',
-                  '9:00 AM',
-                  '10:00 AM',
-                  '11:00 AM',
-                  '12:00 PM',
-                  '1:00 PM',
-                  '2:00 PM',
-                  '3:00 PM',
-                  '4:00 PM',
-                  '5:00 PM',
-                  '6:00 PM',
-                  '7:00 PM',
-                  '8:00 PM'
+                  '6:00',
+                  '7:00',
+                  '8:00',
+                  '9:00',
+                  '10:00',
+                  '11:00',
+                  '12:00',
+                  '13:00',
+                  '14:00',
+                  '15:00',
+                  '16:00',
+                  '17:00',
+                  '18:00',
+                  '19:00',
+                  '20:00'
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -223,21 +223,21 @@ class GroupScheduleFormState extends State<GroupScheduleForm> {
                   });
                 },
                 items: [
-                  '6:00 AM',
-                  '7:00 AM',
-                  '8:00 AM',
-                  '9:00 AM',
-                  '10:00 AM',
-                  '11:00 AM',
-                  '12:00 PM',
-                  '1:00 PM',
-                  '2:00 PM',
-                  '3:00 PM',
-                  '4:00 PM',
-                  '5:00 PM',
-                  '6:00 PM',
-                  '7:00 PM',
-                  '8:00 PM'
+                  '6:00',
+                  '7:00',
+                  '8:00',
+                  '9:00',
+                  '10:00',
+                  '11:00',
+                  '12:00',
+                  '13:00',
+                  '14:00',
+                  '15:00',
+                  '16:00',
+                  '17:00',
+                  '18:00',
+                  '19:00',
+                  '20:00'
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

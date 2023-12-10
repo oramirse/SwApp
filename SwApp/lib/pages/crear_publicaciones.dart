@@ -1,9 +1,6 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/services.dart';
 import 'package:swapp/widgets/group_schedule_form.dart';
 import 'package:swapp/classes/group_schedule.dart';
@@ -19,12 +16,12 @@ class MakePostsPage extends StatefulWidget {
 
 class MakePostsPageState extends State<MakePostsPage> {
   final GlobalKey<GroupScheduleFormState> _keyGroupScheduleForm =
-      GlobalKey<GroupScheduleFormState>();
+  GlobalKey<GroupScheduleFormState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _desiredGroupNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _subjectFilterController =
-      TextEditingController();
+  TextEditingController();
 
   List<String> subjectList = [];
   String? subjectName;
@@ -37,7 +34,7 @@ class MakePostsPageState extends State<MakePostsPage> {
 
   void _makePost() {
     GroupSchedule? groupSchedule =
-        _keyGroupScheduleForm.currentState?.getDataForm();
+    _keyGroupScheduleForm.currentState?.getDataForm();
     if (!_formKey.currentState!.validate() || groupSchedule == null) {
       _showFailMessage();
     } else {
@@ -52,7 +49,6 @@ class MakePostsPageState extends State<MakePostsPage> {
         String userID = user.uid;
         String? userEmail = user.email;
 
-        // Construir un mapa con la información de la publicación
         Map<String, dynamic> publicacionData = {
           'asignatura': subjectName,
           'email_usuario': userEmail,
@@ -62,7 +58,6 @@ class MakePostsPageState extends State<MakePostsPage> {
           'id_usuario': userID,
         };
 
-        // Agregar la publicación a Firestore
         await FirebaseFirestore.instance
             .collection('publicaciones')
             .add(publicacionData);
@@ -111,10 +106,10 @@ class MakePostsPageState extends State<MakePostsPage> {
 
   Future<void> obtenerAsignaturas() async {
     CollectionReference asignaturasCollection =
-        FirebaseFirestore.instance.collection('asignaturas');
+    FirebaseFirestore.instance.collection('asignaturas');
 
     DocumentSnapshot doc =
-        await asignaturasCollection.doc('lista_asignaturas').get();
+    await asignaturasCollection.doc('lista_asignaturas').get();
 
     List<String> asignaturas = List<String>.from(doc['lista']);
     setState(() {
@@ -176,6 +171,7 @@ class MakePostsPageState extends State<MakePostsPage> {
                   ),
                   const SizedBox(height: 8.0),
                   DropdownButtonFormField2<String>(
+                    isExpanded: true,
                     isDense: true,
                     dropdownStyleData: DropdownStyleData(
                       maxHeight: 400,

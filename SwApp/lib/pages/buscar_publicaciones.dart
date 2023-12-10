@@ -126,7 +126,7 @@ class _SearchPostsPageState extends State<SearchPostsPage> {
                   itemCount: filteredPosts.length,
                   itemBuilder: (BuildContext context, int index) {
                     var postData = filteredPosts[index].data() as Map<String, dynamic>;
-                    var daysOrder = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+                    var daysOrder = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                     String formattedSchedule = '';
 
                     int i = 0;
@@ -186,7 +186,7 @@ class _SearchPostsPageState extends State<SearchPostsPage> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => MakeOffer(userEmail: widget.userEmail)),
+                                    MaterialPageRoute(builder: (context) => MakeOffer(userEmail: widget.userEmail, postID: snapshot.data!.docs[index].id,)),
                                   );
                                 },
                                 child: Text(

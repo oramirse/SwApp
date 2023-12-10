@@ -128,12 +128,12 @@ class _OfferPageState extends State<OfferPage> {
 
 
               var daysOrder = [
-                'lunes',
-                'martes',
-                'miércoles',
-                'jueves',
-                'viernes',
-                'sábado'
+                'Lunes',
+                'Martes',
+                'Miércoles',
+                'Jueves',
+                'Viernes',
+                'Sábado'
               ];
               String formattedSchedule = '';
               int i = 0;
